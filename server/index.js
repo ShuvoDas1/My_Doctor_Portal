@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const  MongoClient  = require('mongodb').MongoClient;
 require('dotenv').config();
+const ObjectID = require('mongodb').ObjectId;
 
 const app = express()
 
@@ -34,6 +35,13 @@ client.connect(err => {
     appointmentCollection.find({date: date.date})
     .toArray((err,documents)=>{
         res.send(documents)
+    })
+  })
+
+  app.patch('/appointments/update/:id',(req,res)=>{
+    appointmentCollection.updateOne({_id:ObjectID(req.params.id)},
+    {
+      $set: {isVisited: req.body.isVisited}
     })
   })
 
